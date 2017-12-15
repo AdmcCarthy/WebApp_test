@@ -1,108 +1,49 @@
 <!DOCTYPE html>
-<meta charset="utf-8">
-<body>
-<script src="//d3js.org/d3.v3.min.js"></script>
-<script>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-var width = 960,
-    height = 500,
-    radius = 30;
+    <title>Thanks for the help today - Have a good weekend!</title>
 
-var sampler = poissonDiscSampler(width + radius * 2, height + radius * 2, radius),
-    samples = [],
-    sample;
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+  </head>
 
-while (sample = sampler()) samples.push([sample[0] - radius, sample[1] - radius]);
+  <body>
+    <div class="navbar-wrapper">
+      <div class="container">
+          <h1>Thanks for the help today - Have a good weekend!</h1>
+          <hr/>
+      </div>
+    </div>
 
-var voronoi = d3.geom.voronoi()
-    .clipExtent([[-1, -1], [width + 1, height + 1]]);
+    <!-- Wrap the rest of the page in another container to center all the content. -->
 
-var svg = d3.select("body").append("svg")
-    .attr("width", width)
-    .attr("height", height);
+    <div class="container">
+        
+      <div class="row">
+        <div class="col-xs-12 col-sm-6">
+          <img class="img-rectangle" src="img/azure-portal.png" alt="Azure App Service Web Apps" height="140">
+          <h2>Azure App Service Web Apps</h2>
+          <p>App Service Web Apps is a fully managed compute platform that is optimized for hosting websites and web applications. This platform-as-a-service (PaaS) offering of Microsoft Azure lets you focus on your business logic while Azure takes care of the infrastructure to run and scale your apps.</p>
+        </div>
+          <div class="col-xs-12 col-sm-6">
+              <img class="img-rectangle" src="img/cdn.png" alt="CDN" height="140">
+              <h2>Azure Content Delivery Network (CDN)</h2>
+              <p>The Azure Content Delivery Network (CDN) caches static web content at strategically placed locations to provide maximum throughput for delivering content to users. The CDN offers developers a global solution for delivering high-bandwidth content by caching the content at physical nodes across the world.</p>
+          </div>
+      </div>
+    </div>
 
-svg.selectAll("path")
-    .data(voronoi.triangles(samples).map(d3.geom.polygon))
-  .enter().append("path")
-    .attr("d", function(d) { return "M" + d.join("L") + "Z"; })
-    .style("fill", function(d) { return color(d.centroid()); })
-    .style("stroke", function(d) { return color(d.centroid()); });
-
-function color(d) {
-  var dx = d[0] - width / 2,
-      dy = d[1] - height / 2;
-  return d3.lab(100 - (dx * dx + dy * dy) / 5000, dx / 10, dy / 10);
-}
-
-// Based on https://www.jasondavies.com/poisson-disc/
-function poissonDiscSampler(width, height, radius) {
-  var k = 30, // maximum number of samples before rejection
-      radius2 = radius * radius,
-      R = 3 * radius2,
-      cellSize = radius * Math.SQRT1_2,
-      gridWidth = Math.ceil(width / cellSize),
-      gridHeight = Math.ceil(height / cellSize),
-      grid = new Array(gridWidth * gridHeight),
-      queue = [],
-      queueSize = 0,
-      sampleSize = 0;
-
-  return function() {
-    if (!sampleSize) return sample(Math.random() * width, Math.random() * height);
-
-    // Pick a random existing sample and remove it from the queue.
-    while (queueSize) {
-      var i = Math.random() * queueSize | 0,
-          s = queue[i];
-
-      // Make a new candidate between [radius, 2 * radius] from the existing sample.
-      for (var j = 0; j < k; ++j) {
-        var a = 2 * Math.PI * Math.random(),
-            r = Math.sqrt(Math.random() * R + radius2),
-            x = s[0] + r * Math.cos(a),
-            y = s[1] + r * Math.sin(a);
-
-        // Reject candidates that are outside the allowed extent,
-        // or closer than 2 * radius to any existing sample.
-        if (0 <= x && x < width && 0 <= y && y < height && far(x, y)) return sample(x, y);
-      }
-
-      queue[i] = queue[--queueSize];
-      queue.length = queueSize;
-    }
-  };
-
-  function far(x, y) {
-    var i = x / cellSize | 0,
-        j = y / cellSize | 0,
-        i0 = Math.max(i - 2, 0),
-        j0 = Math.max(j - 2, 0),
-        i1 = Math.min(i + 3, gridWidth),
-        j1 = Math.min(j + 3, gridHeight);
-
-    for (j = j0; j < j1; ++j) {
-      var o = j * gridWidth;
-      for (i = i0; i < i1; ++i) {
-        if (s = grid[o + i]) {
-          var s,
-              dx = s[0] - x,
-              dy = s[1] - y;
-          if (dx * dx + dy * dy < radius2) return false;
-        }
-      }
-    }
-
-    return true;
-  }
-
-  function sample(x, y) {
-    var s = [x, y];
-    queue.push(s);
-    grid[gridWidth * (y / cellSize | 0) + (x / cellSize | 0)] = s;
-    ++sampleSize;
-    ++queueSize;
-    return s;
-  }
-}
-
-</script>
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <script src="js/bootstrap.min.js"></script>
+  </body>
+</html>
